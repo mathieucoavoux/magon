@@ -9,7 +9,7 @@ import fr.comprehensiveit.magon.client.util.WsClientUtil;
 public class BookDaoImpl implements BookDao{
 	
 	public List<Book> findBookByName(Map<String,String> mapConnection, Map<String,String> mapParameter) {
-		String function = "findBookByName";
+		String function = "searchByTitle";
 		WsClientUtil wcu = new WsClientUtil();
 		String extendUrl = wcu.generateRestQuery(function, mapParameter);
 		List<Book> list = (List<Book>) wcu.getWsResult(Book[].class, mapConnection, extendUrl);

@@ -14,6 +14,8 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import fr.comprehensiveit.magon.client.book.Book;
+import fr.comprehensiveit.magon.client.book.Book4Test;
+import fr.comprehensiveit.magon.client.book.Book4TestImpl;
 import fr.comprehensiveit.magon.client.dao.BookDao;
 import fr.comprehensiveit.magon.client.dao.BookDaoImpl;
 
@@ -57,6 +59,7 @@ public class ProxyWsClientTest {
 		}
 	}
 	
+	/*
 	@Test
 	public void testGetProxyWs() {
 		try {
@@ -71,5 +74,20 @@ public class ProxyWsClientTest {
 		
 		//bdi.getFavoriteBook();
 		
+	}
+	*/
+	
+	@Test
+	public void testConnection() {
+		Book4Test bft = (Book4Test) new ProxyWsClient().newInstance(new Book4TestImpl());
+		Map<String,String> mapParameters = new HashMap<String,String>();
+		mapParameters.put("parameter1","value1");
+		Map<String,String> mapCon = bft.getMapConnection(null, mapParameters);
+		String passEncExpected = "dGVzdDp0ZXN0";
+		String urlExpected = "http://localhost:8080/magon-ws";
+		String mappingExpected = "api/book";
+		assertEquals(passEncExpected,mapCon.get("ws.auth.enc"));
+		assertEquals(urlExpected,mapCon.get("ws.url"));
+		assertEquals(mappingExpected,mapCon.get("ws.mapping"));
 	}
 }

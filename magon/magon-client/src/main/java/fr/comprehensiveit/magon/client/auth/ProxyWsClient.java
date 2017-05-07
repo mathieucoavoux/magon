@@ -5,8 +5,6 @@ import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
 
 import org.apache.commons.codec.binary.Base64;
 import org.slf4j.Logger;
@@ -104,6 +102,11 @@ public class ProxyWsClient {
 		 return result;
 	}
 	
+	/**
+	 * Instancie un objet specifie en parametre.
+	 * @param assetType Un objet instancie implementant les methodes d une interface
+	 * @return l objet instancie
+	 */
 	public Object newInstance(Object assetType) {
 		logger.debug("new Instance");
 		//Vérifie si le handler instancié implémente au moins une interface

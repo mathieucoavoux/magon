@@ -28,12 +28,12 @@ public class ProxyWsClientHandler implements InvocationHandler {
 		this.classInstance = classInstance;
 	}
 
-	private Map<String,String> addConnectionDetails() {
+	private Map<String,String> addConnectionDetails(String classType) {
 		Map<String,String> map = new HashMap<String,String>();
 		map.put("ws.url", FileUtil.getPropertyValue(filename, "baseUrl"));
-		map.put("ws.username", FileUtil.getPropertyValue(filename, "username"));
-		String authString = FileUtil.getPropertyValue(filename, "password");
-		map.put("ws.password.enc", new String(Base64.encodeBase64(authString.getBytes())));
+		map.put("ws.mapping",FileUtil.getPropertyValue(filename, classType+"Mapping"));
+		String authString = FileUtil.getPropertyValue(filename, "username")+":"+FileUtil.getPropertyValue(filename, "password");
+		map.put("ws.auth.enc", new String(Base64.encodeBase64(authString.getBytes())));
 		return map;
 	}
 
@@ -41,9 +41,9 @@ public class ProxyWsClientHandler implements InvocationHandler {
 	public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
 		Object result = new Object();
 		
-		
+		logger.debug("method "+method.getName()+" belongs to "+method.getDeclaringClass().getSimpleName());
 		//Set WS connection details
-		mapParams = addConnectionDetails();
+		mapParams = addConnectionDetails(method.getDeclaringClass().getSimpleName());
 		
 		//Add existing params
 		int maxObj = args.length;
@@ -54,7 +54,6 @@ public class ProxyWsClientHandler implements InvocationHandler {
 		for(int indObj = 1;indObj < maxObj; indObj++) {
 			parameters.add(args[indObj]);
 		}
-		
 		
 		try{
 			result = method.invoke(classInstance, parameters.toArray());
