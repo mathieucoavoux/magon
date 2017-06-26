@@ -12,6 +12,11 @@ import fr.comprehensiveit.magon.ws.dao.BookDao;
 @RequestMapping("/api/book")
 public class BookController {
 
+	/**
+	 * Dispatch request to BookDao.findAllBook
+	 * @param title
+	 * @return
+	 */
 	@RequestMapping(
 			value = "/searchByTitle",
 			params = {"title"},

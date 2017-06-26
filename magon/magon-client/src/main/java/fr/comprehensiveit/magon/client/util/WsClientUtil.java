@@ -5,6 +5,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -14,6 +16,7 @@ import org.springframework.web.client.RestTemplate;
 
 public class WsClientUtil {
 
+	public static Logger logger = LoggerFactory.getLogger(WsClientUtil.class);
 	/**
 	 * Generate the REST call 
 	 * @param function Function to call
@@ -41,9 +44,10 @@ public class WsClientUtil {
 	 */
 	public List<?> getWsResult(Type clazz, Map<String,String> mapConnection,String extendUrl) {
 		
-		String url =  mapConnection.get("ws.url")+"/"+clazz.getClass().getSimpleName()+"/"+extendUrl;
+		String url =  mapConnection.get("ws.url")+"/"+mapConnection.get("ws.mapping")+"/"+extendUrl;
+		logger.debug("Request url:"+url);
 		HttpHeaders headers = new HttpHeaders();
-		 headers.add("Authorization", "Basic " + mapConnection.get("ws.password.enc"));
+		 headers.add("Authorization", "Basic " + mapConnection.get("ws.auth.enc"));
 		 headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
 		 RestTemplate restTemplate = new RestTemplate();
 		 HttpEntity<String> request = new HttpEntity<String>(headers);

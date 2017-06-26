@@ -28,6 +28,11 @@ public class ProxyWsClientHandler implements InvocationHandler {
 		this.classInstance = classInstance;
 	}
 
+	/**
+	 * Get connection details from the file and store into a map
+	 * @param classType
+	 * @return
+	 */
 	private Map<String,String> addConnectionDetails(String classType) {
 		Map<String,String> map = new HashMap<String,String>();
 		map.put("ws.url", FileUtil.getPropertyValue(filename, "baseUrl"));
@@ -37,7 +42,9 @@ public class ProxyWsClientHandler implements InvocationHandler {
 		return map;
 	}
 
-	@Override
+	/**
+	 * Invoke method through the proxy
+	 */
 	public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
 		Object result = new Object();
 		

@@ -14,6 +14,11 @@ public class LoadProperties {
 	
 	public static Logger logger = LoggerFactory.getLogger(LoadProperties.class);
 	
+	/**
+	 * Load file
+	 * @return All properties
+	 * @throws IOException
+	 */
 	public static Properties loadFile() throws IOException {
 		Properties prop = new Properties();
 		InputStream input = null;
@@ -24,6 +29,11 @@ public class LoadProperties {
 		
 	}
 	
+	/**
+	 * Get value
+	 * @param key
+	 * @return
+	 */
 	public static String getValue(String key) {
 		String result = null;
 		try {

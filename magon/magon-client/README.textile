@@ -1,0 +1,45 @@
+h1. Magon client
+
+h2. Getting started
+
+h3. Description
+
+This client request book from magon webservice and display it.
+This program uses the following libraries:
+
+* Spring
+* Spring web client
+* Google Gson
+
+h3. Prerequisite
+
+This client requires magon webservice available and at least a JRE 1.7 installed
+Before starting this client you need to create a properties file: magonws/connection.properties with the following content:
+
+<pre>
+baseUrl=http://localhost:8080/magon-ws
+bookMapping=api/book
+username=test
+password=test
+</pre>
+
+The root directory of this file must be parsed in the JVM argument as per this example:
+
+<pre>
+-Dconf.dir="C:/Users/Mathieu/Documents/repository"
+</pre>
+
+h3. Launch
+
+The application expects 4 input parameters:
+
+* First: asset type
+* Second: function
+* Third: filter type
+* Fourth: filter value
+
+For example:
+
+<pre>
+java -Dconf.dir=C:/Users/Mathieu/Documents/repository -jar magon-client.jar book searchByTitle title cambodia
+</pre>

@@ -12,6 +12,12 @@ public class FileUtil {
 
 	private static final Logger logger = LoggerFactory.getLogger(FileUtil.class);
 	
+	/**
+	 * Get property from the file
+	 * @param filename: name of file where the property is stored
+	 * @param variable: the name of the property
+	 * @return String property value
+	 */
 	public static String getPropertyValue(String filename,String variable) {
 		Properties prop = new Properties();
 		InputStream input = null;

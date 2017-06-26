@@ -43,6 +43,7 @@ public class ProxyWsClient {
 		if(filename == null)
 			throw new NullPointerException();
 		baseUrl = FileUtil.getPropertyValue(filename, "baseUrl");
+		logger.debug("baseUrl : "+baseUrl);
 		if(baseUrl == null)
 			throw new NullPointerException();
 		assetMapping = FileUtil.getPropertyValue(filename, assetType+"Mapping");
