@@ -1,5 +1,7 @@
 package fr.comprehensiveit.magon.client;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,6 +12,9 @@ import org.slf4j.LoggerFactory;
 
 import fr.comprehensiveit.magon.client.auth.ProxyWsClient;
 import fr.comprehensiveit.magon.client.book.Book;
+import fr.comprehensiveit.magon.client.dao.BookDao;
+import fr.comprehensiveit.magon.client.dao.BookDaoImpl;
+import fr.comprehensiveit.magon.client.util.ObjectLookup;
 
 
 public class App 
@@ -29,52 +34,69 @@ public class App
     	String filterValue = args[3];
     	Map<String,String> map = new HashMap<String,String>();
 		map.put(filterName,filterValue);
-		ProxyWsClient pwc = new ProxyWsClient();
-    	Class<?> clazz = getClassType(assetType);
-    	if(clazz == null) {
-    		System.out.println("Invalid type");
-    	}
-    	List<?> list = (List<?>) pwc.getWsResult(clazz,assetType, function, map);
-    	printResult(list,assetType);
+		ObjectLookup ol = new ObjectLookup();
+		//Ex binding: bookHandler="BookDaoImpl"
+		Object assetTypeObject = ol.objectResolver(assetType+"Handler");
+		Object objectProxy = ProxyWsClient.newInstance(assetTypeObject);
+		//Ex binding: book="BookDao"
+		Class<?> objectFinalClass = ol.objectClassResolver(assetType);
+		//Get list of books
+		Object listAssets = getAsset(objectProxy,objectFinalClass,map);
+		//Display the list
+		printAssetList(listAssets,objectFinalClass,assetTypeObject);
     }
-    
-    /**
-     * Get the class of the asset type
-     * @param assetType: type of the asset
-     * @return Class<?>: class of the asset
-     */
-    protected static Class<?> getClassType(String assetType) {
-    	switch(assetType) {
-    	case "book":
-    		return Book[].class;
-    	default:
-    		return null;
-    	}
-    }
-    
-    /**
-     * Dispatch the result to print according to the asset type
-     * @param list: result list
-     * @param assetType: type of the asset
-     */
-    protected static void printResult(List<?> list, String assetType) {
-    	switch(assetType) {
-    	case "book":
-    		List<Book> listBook = (List<Book>) list;
-    		printBookResult(listBook);
-    		break;
-    	default:
-    		System.out.println("Invalid type. How did I get there by the way?");
-    	}
-    }
-    
-    /**
-     * Print the list of books
-     * @param list
-     */
-    protected static void printBookResult(List<Book> list) {
-    	for(Book book: list) {
-    		System.out.printf("Book id: %s,title: %s\n",book.getId(),book.getTitle());
-    	}
-    }
+   
+   /**
+    * Get requested asset from a web service
+    * @param object: Instantiate class where the method findAssetByName is implemented
+    * @param args: arguments requested by findAssetByName method
+    * @return a list of assets
+    */
+   protected static Object getAsset(Object objectProxy,Class<?> objectFinalClass, Map<String,String> map) {
+	   Class<?>[] methodObjectType = new Class[]{Map.class,Map.class};
+		Object[] argsObj = new Object[]{null,map};
+		try {
+			//Method method = resultType.getMethod("printResult", methodObjectType);
+			//Method to get the book
+			Method method = objectFinalClass.getMethod("findAssetByName", methodObjectType);
+			//Get the book, return a list of book
+			return method.invoke(objectProxy,argsObj );
+		} catch (NoSuchMethodException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			e.getCause();
+		} catch (SecurityException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalArgumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+   }
+   
+   /**
+    * Print list of assets
+    * @param listAssets
+    * @param objectFinalClass: Interface which is using the handler
+    * @param objectHandler: Class implementing the interface
+    */
+   public static void printAssetList(Object listAssets,Class<?> objectFinalClass,Object objectHandler) {
+	 //Define the argument type that the printResult method expect:
+	 Class<?>[] printResArgType = new Class[]{List.class};
+	 try {
+		Method methodPrint = objectFinalClass.getMethod("printResult", printResArgType);
+		methodPrint.invoke(objectHandler,listAssets);
+	} catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+	 	
+   }
 }

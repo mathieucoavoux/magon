@@ -21,6 +21,7 @@ import fr.comprehensiveit.magon.client.dao.BookDaoImpl;
 
 public class ProxyWsClientTest {
 	
+	/*
 	@Test
 	public void testGetWsResult() {
 		String assetType = "book";
@@ -33,5 +34,6 @@ public class ProxyWsClientTest {
 			System.out.println(book.getTitle());
 		}
 	}
+	*/
 	
 }

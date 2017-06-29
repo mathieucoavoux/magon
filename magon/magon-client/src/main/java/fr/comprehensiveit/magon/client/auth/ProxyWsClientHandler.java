@@ -16,7 +16,7 @@ import fr.comprehensiveit.magon.client.util.FileUtil;
 
 public class ProxyWsClientHandler implements InvocationHandler {
 
-	private static String filename = "clientws/connection.properties";
+	private static String filename = "connection.properties";
 	
 	public static Logger logger = LoggerFactory.getLogger(ProxyWsClientHandler.class);
 	
@@ -47,7 +47,7 @@ public class ProxyWsClientHandler implements InvocationHandler {
 	 */
 	public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
 		Object result = new Object();
-		
+		logger.debug("Proxy invoke method");
 		logger.debug("method "+method.getName()+" belongs to "+method.getDeclaringClass().getSimpleName());
 		//Set WS connection details
 		mapParams = addConnectionDetails(method.getDeclaringClass().getSimpleName());

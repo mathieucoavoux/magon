@@ -13,5 +13,8 @@ public interface BookDao {
 	 * @param mapParameter: filter
 	 * @return List<Book>
 	 */
-	public List<Book> findBookByName(Map<String,String> mapConnection, Map<String,String> mapParameter);
+	public List<Book> findAssetByName(Map<String,String> mapConnection, Map<String,String> mapParameter);
+	
+	public void printResult(List<Book> list);
+	
 }

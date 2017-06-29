@@ -14,7 +14,7 @@ import fr.comprehensiveit.magon.client.book.Book;
 public class BookDaoImplTest {
 
 	@Test
-	public void testFindBookByName() {
+	public void testFindAssetByName() {
 		BookDaoImpl bdi = new BookDaoImpl();
 		String authString = "test:test";
 		String authStringEnc = new String(Base64.encodeBase64(authString.getBytes()));
@@ -26,7 +26,7 @@ public class BookDaoImplTest {
 		String titleExpected = "cambodia";
 		mapParameters.put("title", titleExpected);
 		//try catch HttpServerErrorException (500)
-		List<Book> list = bdi.findBookByName(mapConnection, mapParameters);
+		List<Book> list = bdi.findAssetByName(mapConnection, mapParameters);
 		assertEquals(1,list.size());
 		for(Book book : list) {
 			assertEquals(titleExpected,book.getTitle());
